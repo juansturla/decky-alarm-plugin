@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        //"All-in-one" build task
+        {
+            "label": "build",
+            "group": "build",
+            "type": "shell",
+            "detail": "Build decky-plugin-template",
+            "command": "make build",
+            "problemMatcher": []
+        },
+        //"All-in-one" deploy task
+        {
+            "label": "deploy",
+            "dependsOrder": "sequence",
+            "group": "build",
+            "type": "shell",
+            "command": "make deploy",
+            "problemMatcher": []
+        },
+        //"All-in-on" build & deploy task
+        {
+            "label": "builddeploy",
+            "detail": "Builds plugin and deploys to deck",
+            "dependsOrder": "sequence",
+            "group": "build",
+            "dependsOn": [
+                "build",
+                "deploy"
+            ],
+            "problemMatcher": []
+        },
+    ]
+}

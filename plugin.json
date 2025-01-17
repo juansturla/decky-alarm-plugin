@@ -1,0 +1,11 @@
+{
+    "name": "Decky alarm",
+    "author": "chicken",
+    "flags": [],
+    "api_version": 1,
+    "publish": {
+        "tags": ["alarm", "toast", "utility"],
+        "description": "A plugin that let's you configure several alarms that will be displayed as toast",
+        "image": "https://raw.githubusercontent.com/jsturla/decky-alarm-plugin/main/images/image001.png"
+    }
+}

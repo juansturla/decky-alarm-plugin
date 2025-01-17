@@ -1,0 +1,40 @@
+{
+    "name": "decky-alarm",
+    "version": "0.0.1",
+    "description": "A plugin that let's you configure several alarms that will be displayed as toast",
+    "type": "module",
+    "scripts": {
+        "build": "rollup -c",
+        "prepare": "husky install"
+    },
+    "author": "chicken",
+    "license": "MIT",
+    "private": true,
+    "devDependencies": {
+        "@commitlint/cli": "^17.8.1",
+        "@commitlint/config-conventional": "^17.8.1",
+        "@decky/rollup": "^1.0.1",
+        "@decky/ui": "^4.8.0",
+        "@types/fast-levenshtein": "^0.0.2",
+        "@types/react": "^17.0.70",
+        "@types/react-dom": "^18.2.15",
+        "@types/webpack": "^5.28.0",
+
+        "husky": "^8.0.3",
+        "lint-staged": "^13.3.0",
+        "prettier": "2.7.1",
+        "rollup": "^4.19.1",
+        "tslib": "^2.6.3",
+        "typescript": "^5.5.4"
+    },
+    "dependencies": {
+        "@decky/api": "^1.1.2",
+        "fast-levenshtein": "^3.0.0",
+        "localforage": "^1.10.0",
+        "react": "^18.2.0",
+        "react-icons": "^4.12.0"
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": "prettier --write"
+    }
+}
