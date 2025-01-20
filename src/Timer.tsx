@@ -1,6 +1,5 @@
 import { toaster } from '@decky/api';
-import { clear } from 'localforage';
-import { useRegularAlarm, usePlaytimeAlarm, getRegularAlarms } from './hooks/Cache'
+import { getRegularAlarms } from './hooks/Cache'
 
 export class Timer {
 
@@ -27,7 +26,7 @@ export class Timer {
     this.playtimeAlarmTimers[minutes] = await this.getInterval(minutes * 60, callback);
   }
 
-  public static setRegularAlarmTimer = async (timeInMinutes: number) => {
+  public static setRegularAlarmTimer = async (timeInMinutes: number, instantToast: boolean) => {
     const index = Object.keys(this.regularAlarmTimers).findIndex(item => item === timeInMinutes.toString());
     if (index !== -1) {
       return;
@@ -65,8 +64,9 @@ export class Timer {
 
     const intervalInSeconds = totalMinutesUntilAlarm * 60;
     this.regularAlarmTimers[timeInMinutes] = await this.getInterval(intervalInSeconds, callback);
-
-    toaster.toast({ title: 'Alarm ready!', body: `Will sound in ${('00'+hoursUntilAlarm).slice(-2)}:${('00'+minutesUntilAlarm).slice(-2)}` })
+    if (instantToast) {
+      toaster.toast({ title: 'Alarm ready!', body: `Will sound in ${('00' + hoursUntilAlarm).slice(-2)}:${('00' + minutesUntilAlarm).slice(-2)}` })
+    }
   }
 
   public static clearRegularAlarmTimer = async (timeInMinutes: number) => {
@@ -78,6 +78,12 @@ export class Timer {
     }
     clearInterval(this.regularAlarmTimers[timeInMinutes]);
     delete this.regularAlarmTimers[timeInMinutes];
+  }
+
+  public static clearAllAlarmTimers = async () => {
+    Object.values(this.regularAlarmTimers)
+      .forEach(timeout => clearInterval(timeout));
+    this.regularAlarmTimers = {};
   }
 
   private static async getInterval(intervalInSeconds: number, callback: any): Promise<NodeJS.Timeout> {
@@ -95,26 +101,18 @@ export class Timer {
       const regularAlarms = await getRegularAlarms();
       Object.entries(regularAlarms).map(
         ([key, value]) => {
-            const keyAsInteger = Number.parseInt(key);
-            if (value) {
-                Timer.setRegularAlarmTimer(keyAsInteger);
-            }
+          const keyAsInteger = Number.parseInt(key);
+          if (value) {
+            Timer.setRegularAlarmTimer(keyAsInteger, false);
+          }
         }
-    );
+      );
     })()
   }
 
   public static unsetupRegularAlarms() {
     (async () => {
-      const regularAlarms = await getRegularAlarms();
-      Object.entries(regularAlarms).map(
-        ([key, value]) => {
-            const keyAsInteger = Number.parseInt(key);
-            if (value) {
-                Timer.clearRegularAlarmTimer(keyAsInteger);
-            }
-        }
-    );
+      Timer.clearAllAlarmTimers();
     })()
   }
 }

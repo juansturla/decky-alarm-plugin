@@ -5,7 +5,7 @@ import { useState } from 'react';
 import AlarmTab from './AlarmTab';
 
 export default function HomePage() {
-  const [currentTab, setCurrentTab] = useState<string>("playtime");
+  const [currentTab, setCurrentTab] = useState<string>("regular");
   return (
     <div style={{
       height: '800px',
@@ -20,17 +20,17 @@ export default function HomePage() {
         }}
         tabs={[
           {
-            title: "Playtime Alarms",
-            content: <AlarmTab
-             isRegularAlarmTab={false} />,
-            id: "playtime",
-          },
-          {
             title: "Regular Alarms",
             content: <AlarmTab
             isRegularAlarmTab={true} />,
             id: "regular",
           },
+          /*{
+            title: "Playtime Alarms",
+            content: <AlarmTab
+             isRegularAlarmTab={false} />,
+            id: "playtime",
+          },*/
         ]}
       />
     </div>

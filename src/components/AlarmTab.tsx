@@ -7,7 +7,6 @@ import { useRegularAlarm, usePlaytimeAlarm } from '../hooks/Cache'
 import { Timer } from '../Timer'
 import AlarmRow from './AlarmRow';
 
-
 export interface AlarmTabProps {
     isRegularAlarmTab?: boolean,
     isDeleting?: boolean,
@@ -38,7 +37,7 @@ export default function AlarmTab(props: AlarmTabProps) {
 
 function toggleRegularAlarm(keyAsInteger:number,newValue:boolean) {
     if (newValue) {
-        Timer.setRegularAlarmTimer(keyAsInteger);
+        Timer.setRegularAlarmTimer(keyAsInteger, true);
     } else {
         // Deactivate existing alarm
         Timer.clearRegularAlarmTimer(keyAsInteger);
@@ -53,7 +52,7 @@ export function RegularAlarmTab(props: AlarmTabProps) {
             const keyAsInteger = Number.parseInt(key);
             console.log(`Creating regularAlarmElements alarm key: ${key} and value ${value}`);
             if (value) {
-                Timer.setRegularAlarmTimer(keyAsInteger);
+                Timer.setRegularAlarmTimer(keyAsInteger, false);
             }
             const hours = Math.trunc(keyAsInteger / 60);
             const minutes = keyAsInteger % 60;

@@ -31,9 +31,11 @@ const sampleRegularAlarms = {
     [0]: true, //00:00
     [150]: true, //02:30am
     [480]: false, //8:00am
+    [668]: true, //9:30am
     [946]: false, //15:32
     [947]: false, //15:32
 }
+
 // TODO: Implement this
 // export async function setPlaytimeAlarms --> Replace all alarms
 // export async function setRegularAlarms --> Replace all alarms

@@ -1,27 +1,33 @@
 import { definePlugin, staticClasses } from '@decky/ui';
-import { routerHook } from '@decky/api';
 import { FaRegClock } from 'react-icons/fa';
-import { LoadingScreen } from './components/LoadingScreen';
-import ComponentsShowcase from './components/ComponentsShowcase';
 import HomePage from './components/Homepage';
 import { Timer } from './Timer';
+import { toaster } from '@decky/api';
+
+interface SteamHook {
+    unregister: () => void
+}
 
 export default definePlugin(() => {
-    //const libraryContextMenuPatch = contextMenuPatch(LibraryContextMenu);
-    //const libraryAppPagePatch = patchAppPage();
-    routerHook.addRoute('/decky-alarm/loading', LoadingScreen);
+    const activeHooks: SteamHook[] = [];
+
     Timer.setupRegularAlarms();
+
+    activeHooks.push(
+        SteamClient.System.RegisterForOnResumeFromSuspend(async () => {
+        toaster.toast({ title: 'Resuming!', body: 'Fromsuspend' })
+        Timer.unsetupRegularAlarms();
+        Timer.setupRegularAlarms();
+        })
+    );
 
     return {
         title: <div className={staticClasses.Title}>Decky Alarm</div>,
         icon: <FaRegClock />,
         content: <HomePage />,
         onDismount() {
-            //libraryContextMenuPatch?.unpatch();
-            //routerHook.removePatch('/library/app/:appid', libraryAppPagePatch);
             Timer.unsetupRegularAlarms();
-
-            routerHook.removeRoute('/decky-alarm/loading');
+            activeHooks.forEach((it) => it.unregister())
         },
     };
 });
