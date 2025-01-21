@@ -31,17 +31,41 @@ const sampleRegularAlarms = {
     [0]: true, //00:00
     [150]: true, //02:30am
     [480]: false, //8:00am
-    [668]: true, //9:30am
-    [946]: false, //15:32
-    [947]: false, //15:32
 }
 
 // TODO: Implement this
 // export async function setPlaytimeAlarms --> Replace all alarms
 // export async function setRegularAlarms --> Replace all alarms
 
-// export async function addtPlaytimeAlarms --> Get current alarms and add new one
+// export async function addPlaytimeAlarms --> Get current alarms and add new one
 // export async function addRegularAlarms --> Get current alarms and add new one
+export async function addRegularAlarm(minutes:number): Promise<boolean> {
+    const currentAlarms = await getRegularAlarms();
+
+    const index = Object.keys(currentAlarms).findIndex(item => item === minutes.toString());
+    // Key already exists
+    if (index !== -1) {
+      return false;
+    }
+
+    currentAlarms[minutes] = true;
+    await localforage.setItem<RegularAlarmDict>(regularAlarmsKey, currentAlarms);
+    return true;
+}
+
+export async function updateRegularAlarm(minutes:number, newValue:boolean): Promise<boolean> {
+    const currentAlarms = await getRegularAlarms();
+    const index = Object.keys(currentAlarms).findIndex(item => item === minutes.toString());
+    // Key doesn't exists
+    if (index === -1) {
+      return false;
+    }
+
+    currentAlarms[minutes] = newValue;
+    await localforage.setItem<RegularAlarmDict>(regularAlarmsKey, currentAlarms);
+    return true;
+}
+
 
 
 export const useRegularAlarm = () => {
@@ -74,11 +98,17 @@ export async function getCache<T>(key: string): Promise<T | null> {
 
 export async function getPlaytimeAlarms(): Promise<PlaytimeAlarmDict> {
     const alarms = await localforage.getItem<PlaytimeAlarmDict>(playtimeKey);
-    return alarms === null ? samplePlaytimeAlarms : alarms
+    if (!alarms) {
+        await localforage.setItem<PlaytimeAlarmDict>(playtimeKey, samplePlaytimeAlarms);
+    }
+    return alarms === null ? samplePlaytimeAlarms : alarms;
 }
 
 export async function getRegularAlarms(): Promise<RegularAlarmDict> {
     const alarms = await localforage.getItem<RegularAlarmDict>(regularAlarmsKey);
+    if (!alarms) {
+        await localforage.setItem<RegularAlarmDict>(regularAlarmsKey, sampleRegularAlarms)
+    }
     return alarms === null ? sampleRegularAlarms : alarms
 }
 

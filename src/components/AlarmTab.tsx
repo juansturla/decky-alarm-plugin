@@ -3,18 +3,24 @@ import {
     ToggleField
 } from '@decky/ui';
 import { useState } from 'react';
-import { useRegularAlarm, usePlaytimeAlarm } from '../hooks/Cache'
+import { useRegularAlarm, usePlaytimeAlarm, RegularAlarmDict } from '../hooks/Cache'
 import { Timer } from '../Timer'
+import AlarmCreator from './AlarmCreator';
 import AlarmRow from './AlarmRow';
 
 export interface AlarmTabProps {
     isRegularAlarmTab?: boolean,
     isDeleting?: boolean,
     onToggleDelete?(checked: boolean): void,
+    onNewAlarmCreated?():void,
 };
 
 export default function AlarmTab(props: AlarmTabProps) {
     const [isDeletingAlarms, setIsDeletingAlarms] = useState<boolean>(false);
+    const [reRenderFlag, setReRenderFlag] = useState<boolean>(false);
+    props.onNewAlarmCreated = () => {
+        setReRenderFlag(!reRenderFlag);
+    }
 
     if (props.isRegularAlarmTab) {
         return (<RegularAlarmTab
@@ -23,6 +29,7 @@ export default function AlarmTab(props: AlarmTabProps) {
                 console.log(`Toggled Regular alarm Toggle new value is: ${e}`)
                 setIsDeletingAlarms(e)
             }}
+            onNewAlarmCreated={props.onNewAlarmCreated}
         />);
     } else {
         return (<PlaytimeAlarmTab
@@ -31,6 +38,7 @@ export default function AlarmTab(props: AlarmTabProps) {
                 console.log(`Toggled Playtime alarm Toggle new value is: ${e}`)
                 setIsDeletingAlarms(e)
             }}
+            onNewAlarmCreated={props.onNewAlarmCreated}
         />);
     }
 };
@@ -45,6 +53,11 @@ function toggleRegularAlarm(keyAsInteger:number,newValue:boolean) {
 }
 
 export function RegularAlarmTab(props: AlarmTabProps) {
+    const [reRenderFlag, setReRenderFlag] = useState<boolean>(false);
+    props.onNewAlarmCreated = () => {
+        const newValue = !reRenderFlag;
+        setReRenderFlag(newValue);
+    }
     console.log(`Rendering RegularAlarmTab props: isDeleting ? ${props.isDeleting} `);
     const regularAlarms = useRegularAlarm();
     const regularAlarmElements = Object.entries(regularAlarms).map(
@@ -72,6 +85,9 @@ export function RegularAlarmTab(props: AlarmTabProps) {
                 label='IsDeleting ?'
                 checked={props.isDeleting || false}
                 onChange={props.onToggleDelete}
+            />
+            <AlarmCreator
+                onNewAlarmCreated={props.onNewAlarmCreated}
             />
         </PanelSection>
     );
