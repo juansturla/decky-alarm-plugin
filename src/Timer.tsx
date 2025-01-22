@@ -1,5 +1,5 @@
 import { toaster } from '@decky/api';
-import { getRegularAlarms, updateRegularAlarm } from './hooks/Cache'
+import { getRegularAlarms, updateRegularAlarm, deleteRegularAlarm } from './hooks/Cache'
 import { minutesToDateTimeString } from './utils';
 
 export class Timer {
@@ -72,7 +72,12 @@ export class Timer {
     delete this.regularAlarmTimers[timeInMinutes];
 
     // update
-    updateRegularAlarm(timeInMinutes, false);
+    await updateRegularAlarm(timeInMinutes, false);
+  }
+
+  public static deleteRegularAlarm = async (timeInMinutes: number) => {
+    await this.clearRegularAlarmTimer(timeInMinutes);
+    await deleteRegularAlarm(timeInMinutes)
   }
 
   public static clearAllRegularAlarmTimers = async () => {

@@ -7,12 +7,13 @@ import { useRegularAlarm, usePlaytimeAlarm, RegularAlarmDict } from '../hooks/Ca
 import { Timer } from '../Timer'
 import AlarmCreator from './AlarmCreator';
 import AlarmRow from './AlarmRow';
+import { minutesToDateTimeString } from '../utils';
 
 export interface AlarmTabProps {
     isRegularAlarmTab?: boolean,
     isDeleting?: boolean,
     onToggleDelete?(checked: boolean): void,
-    onNewAlarmCreated?():void,
+    onNewAlarmCreated?(): void,
 };
 
 export default function AlarmTab(props: AlarmTabProps) {
@@ -52,6 +53,10 @@ function toggleRegularAlarm(keyAsInteger:number,newValue:boolean) {
     }
 }
 
+async function deleteRegularAlarm(keyAsInteger: number) {
+    await Timer.deleteRegularAlarm(keyAsInteger);
+}
+
 export function RegularAlarmTab(props: AlarmTabProps) {
     const [reRenderFlag, setReRenderFlag] = useState<boolean>(false);
     props.onNewAlarmCreated = () => {
@@ -63,19 +68,23 @@ export function RegularAlarmTab(props: AlarmTabProps) {
     const regularAlarmElements = Object.entries(regularAlarms).map(
         ([key, value]) => {
             const keyAsInteger = Number.parseInt(key);
-            console.log(`Creating regularAlarmElements alarm key: ${key} and value ${value}`);
+            console.log(`Creating regularAlarmElements alarm key: ${key} (${minutesToDateTimeString(keyAsInteger)}) and value ${value}`);
             if (value) {
                 Timer.setRegularAlarmTimer(keyAsInteger, false);
             }
-            const hours = Math.trunc(keyAsInteger / 60);
-            const minutes = keyAsInteger % 60;
 
-            return (<AlarmRow
-                textLabel={`${('00'+hours).slice(-2)}:${('00'+minutes).slice(-2)}`}
-                toggleValue={value}
-                isDeleting={props.isDeleting}
-                onToggle={e => toggleRegularAlarm(keyAsInteger, e)}
-            />);
+            return (
+                <AlarmRow
+                    isDeleting={props.isDeleting}
+                    onToggle={async e => await toggleRegularAlarm(keyAsInteger, e)}
+                    onDeleteClicked={async() => {
+                        await deleteRegularAlarm(keyAsInteger);
+                        onNewAlarmCreated();
+                    }}
+                    textLabel={minutesToDateTimeString(keyAsInteger)}
+                    toggleValue={value}
+                />
+            );
         }
     );
     return (
@@ -99,16 +108,21 @@ export function PlaytimeAlarmTab(props: AlarmTabProps) {
     const playtimeAlarms = usePlaytimeAlarm();
     const playtimeAlarmsElements = Object.entries(playtimeAlarms).map(
         ([key, value]) => {
+            const keyAsInteger = Number.parseInt(key);
             console.log(`Creating playtime alarm key: ${key} and value ${value}`);
             if (value) {
                 Timer.setPlaytimeAlarmTimer(Number.parseInt(key));
             }
 
-            return (<AlarmRow
-                textLabel={`Every ${key} minutes`}
-                toggleValue={value}
-                isDeleting={props.isDeleting}
-            />);
+            return (
+                <AlarmRow
+                    isDeleting={props.isDeleting}
+                    onToggle={e => toggleRegularAlarm(keyAsInteger, e)}
+                    onDeleteClicked={() => deleteRegularAlarm(keyAsInteger)}
+                    textLabel={`Every ${key} minutes`}
+                    toggleValue={value}
+                />
+            );
         }
     )
     return (

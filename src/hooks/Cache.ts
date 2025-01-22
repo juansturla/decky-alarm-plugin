@@ -53,6 +53,20 @@ export async function addRegularAlarm(minutes:number): Promise<boolean> {
     return true;
 }
 
+export async function deleteRegularAlarm(minutes:number): Promise<boolean> {
+    const currentAlarms = await getRegularAlarms();
+
+    const index = Object.keys(currentAlarms).findIndex(item => item === minutes.toString());
+    // Key doesn't exists
+    if (index === -1) {
+      return false;
+    }
+
+    delete currentAlarms[minutes];
+    await localforage.setItem<RegularAlarmDict>(regularAlarmsKey, currentAlarms);
+    return true;
+}
+
 export async function updateRegularAlarm(minutes:number, newValue:boolean): Promise<boolean> {
     const currentAlarms = await getRegularAlarms();
     const index = Object.keys(currentAlarms).findIndex(item => item === minutes.toString());
@@ -65,8 +79,6 @@ export async function updateRegularAlarm(minutes:number, newValue:boolean): Prom
     await localforage.setItem<RegularAlarmDict>(regularAlarmsKey, currentAlarms);
     return true;
 }
-
-
 
 export const useRegularAlarm = () => {
     const [regularAlarms, setRegularAlarms] = useState<RegularAlarmDict>({});

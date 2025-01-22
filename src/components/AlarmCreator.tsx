@@ -1,10 +1,8 @@
 import {
     Button,
     ButtonItem,
-    Field,
     PanelSectionRow,
     TextField,
-    ToggleField
 } from '@decky/ui';
 import { useState } from 'react';
 import { addRegularAlarm } from '../hooks/Cache';
@@ -29,7 +27,9 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
         }}>
 
             <Button
-                onClick={e => setHours(hours - 1)}
+                onClick={
+                    _ => setHours(hours - 1)
+                }
             >
                 -
             </Button>
@@ -54,7 +54,9 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
         }}>
 
             <Button
-                onClick={e => setMinutes(minutes - 5)}
+                onClick={
+                    _ => setMinutes(minutes - 5)
+                }
             >
                 -
             </Button>
@@ -65,13 +67,17 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
                 value={minutes.toString()}>
             </TextField>
             <Button
-                onClick={e => setMinutes(minutes + 5)}
+                onClick={
+                    _ => setMinutes(minutes + 5)
+                }
             >
                 +
             </Button>
         </div>
         <ButtonItem
-            onClick={e => createNewAlarm(hours, minutes, props)}
+            onClick={
+                _ => createNewAlarm(hours, minutes, props)
+            }
         >
             Create alarm
         </ButtonItem>
