@@ -2,7 +2,7 @@ import {
     PanelSection,
     ToggleField
 } from '@decky/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRegularAlarm, usePlaytimeAlarm, RegularAlarmDict } from '../hooks/Cache'
 import { Timer } from '../Timer'
 import AlarmCreator from './AlarmCreator';
@@ -59,16 +59,16 @@ async function deleteRegularAlarm(keyAsInteger: number) {
 
 export function RegularAlarmTab(props: AlarmTabProps) {
     const [reRenderFlag, setReRenderFlag] = useState<boolean>(false);
-    props.onNewAlarmCreated = () => {
+    const onNewAlarmCreated = () => {
         const newValue = !reRenderFlag;
         setReRenderFlag(newValue);
-    }
-    console.log(`Rendering RegularAlarmTab props: isDeleting ? ${props.isDeleting} `);
+    };
+    props.onNewAlarmCreated = onNewAlarmCreated
     const regularAlarms = useRegularAlarm();
+    console.log(`Rendering RegularAlarmTab props: isDeleting ? ${props.isDeleting}. Alarms ${Object.keys(regularAlarms).length} `);
     const regularAlarmElements = Object.entries(regularAlarms).map(
         ([key, value]) => {
             const keyAsInteger = Number.parseInt(key);
-            console.log(`Creating regularAlarmElements alarm key: ${key} (${minutesToDateTimeString(keyAsInteger)}) and value ${value}`);
             if (value) {
                 Timer.setRegularAlarmTimer(keyAsInteger, false);
             }
@@ -77,9 +77,9 @@ export function RegularAlarmTab(props: AlarmTabProps) {
                 <AlarmRow
                     isDeleting={props.isDeleting}
                     onToggle={async e => await toggleRegularAlarm(keyAsInteger, e)}
-                    onDeleteClicked={async() => {
-                        await deleteRegularAlarm(keyAsInteger);
-                        onNewAlarmCreated();
+                    onDeleteClicked={() => {
+                        deleteRegularAlarm(keyAsInteger)
+                            .then(onNewAlarmCreated);
                     }}
                     textLabel={minutesToDateTimeString(keyAsInteger)}
                     toggleValue={value}
@@ -96,7 +96,10 @@ export function RegularAlarmTab(props: AlarmTabProps) {
                 onChange={props.onToggleDelete}
             />
             <AlarmCreator
-                onNewAlarmCreated={props.onNewAlarmCreated}
+                onNewAlarmCreated={() => {
+                    props.onNewAlarmCreated?.()
+                    onNewAlarmCreated()
+                }}
             />
         </PanelSection>
     );
@@ -118,7 +121,10 @@ export function PlaytimeAlarmTab(props: AlarmTabProps) {
                 <AlarmRow
                     isDeleting={props.isDeleting}
                     onToggle={e => toggleRegularAlarm(keyAsInteger, e)}
-                    onDeleteClicked={() => deleteRegularAlarm(keyAsInteger)}
+                    onDeleteClicked={async() => {
+                        await deleteRegularAlarm(keyAsInteger);
+                        //onNewAlarmCreated();
+                    }}
                     textLabel={`Every ${key} minutes`}
                     toggleValue={value}
                 />

@@ -82,13 +82,11 @@ export async function updateRegularAlarm(minutes:number, newValue:boolean): Prom
 
 export const useRegularAlarm = () => {
     const [regularAlarms, setRegularAlarms] = useState<RegularAlarmDict>({});
-    useEffect(() => {
-        const getData = async () => {
-            setRegularAlarms(await getRegularAlarms());
-        };
-        getData();
-    }, []);
-
+    const getData = async () => {
+        const regularAlarms = await getRegularAlarms();
+        setRegularAlarms(regularAlarms);
+    };
+    getData();
     return regularAlarms;
 };
 
