@@ -2,8 +2,8 @@ import {
     PanelSection,
     ToggleField
 } from '@decky/ui';
-import { useEffect, useState } from 'react';
-import { useRegularAlarm, usePlaytimeAlarm, RegularAlarmDict } from '../hooks/Cache'
+import { useState } from 'react';
+import { useRegularAlarm, usePlaytimeAlarm } from '../hooks/Cache'
 import { Timer } from '../Timer'
 import AlarmCreator from './AlarmCreator';
 import AlarmRow from './AlarmRow';

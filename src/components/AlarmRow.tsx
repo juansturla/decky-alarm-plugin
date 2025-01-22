@@ -1,5 +1,5 @@
 import {
-    ButtonItem,
+    Button,
     PanelSectionRow,
     ToggleField
 } from '@decky/ui';
@@ -16,18 +16,27 @@ export default function AlarmRow(props: AlarmRowProps) {
     return (<PanelSectionRow key={props.textLabel}>
 
         {
-            props.isDeleting ?
-                <ButtonItem
-                    label={props.textLabel}
+            <div style={{
+                height:'50px',
+                maxHeight:'50px',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            }}>
+                <label>{props.textLabel}</label>
+            {props.isDeleting ?
+                <Button
                     onClick={ _ => props.onDeleteClicked()}
                 >
                     X
-                </ButtonItem>
+                </Button>
                 : <ToggleField
-                    label={props.textLabel}
                     checked={props.toggleValue}
                     onChange={props.onToggle}
-                />
+                    bottomSeparator='none'
+                />}
+            </div>
         }
-    </PanelSectionRow>);;
+    </PanelSectionRow>);
 };
