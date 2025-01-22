@@ -16,6 +16,26 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
     const [hours, setHours] = useState<number>(0);
     const [minutes, setMinutes] = useState<number>(0);
 
+    const setMinutesWrapper = (newMinutes:number) => {
+        if (newMinutes < 0) {
+            setMinutes(55)
+        } else if (newMinutes >= 60) {
+            setMinutes(0)
+        } else {
+            setMinutes(newMinutes)
+        }
+    }
+
+    const seHoursWrapper = (newHours:number) => {
+        if (newHours < 0) {
+            setHours(23)
+        } else if (newHours >= 24) {
+            setHours(0)
+        } else {
+            setHours(newHours)
+        }
+    }
+
     return (
     <PanelSectionRow>
         <label>Hours</label>
@@ -28,19 +48,22 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
 
             <Button
                 onClick={
-                    _ => setHours(hours - 1)
+                    _ => seHoursWrapper(hours - 1)
                 }
             >
                 -
             </Button>
             <TextField
+                disabled={true}
                 rangeMin={0}
                 rangeMax={24}
                 mustBeNumeric={true}
                 value={hours.toString()}>
             </TextField>
             <Button
-                onClick={e => setHours(hours + 1)}
+                onClick={
+                    _ => seHoursWrapper(hours + 1)
+                }
             >
                 +
             </Button>
@@ -55,12 +78,13 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
 
             <Button
                 onClick={
-                    _ => setMinutes(minutes - 5)
+                    _ => setMinutesWrapper(minutes - 5)
                 }
             >
                 -
             </Button>
             <TextField
+                disabled={true}
                 mustBeNumeric={true}
                 rangeMin={0}
                 rangeMax={60}
@@ -68,7 +92,7 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
             </TextField>
             <Button
                 onClick={
-                    _ => setMinutes(minutes + 5)
+                    _ => {setMinutesWrapper(minutes + 5)}
                 }
             >
                 +

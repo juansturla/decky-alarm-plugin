@@ -12,12 +12,15 @@ import { minutesToDateTimeString } from '../utils';
 export interface AlarmTabProps {
     isRegularAlarmTab?: boolean,
     isDeleting?: boolean,
+    isCreating?: boolean,
+    onToggleCreation?(checked: boolean): void,
     onToggleDelete?(checked: boolean): void,
     onNewAlarmCreated?(): void,
 };
 
 export default function AlarmTab(props: AlarmTabProps) {
     const [isDeletingAlarms, setIsDeletingAlarms] = useState<boolean>(false);
+    const [isCreatingAlarms, setIsCreatingAlarms] = useState<boolean>(false);
     const [reRenderFlag, setReRenderFlag] = useState<boolean>(false);
     props.onNewAlarmCreated = () => {
         setReRenderFlag(!reRenderFlag);
@@ -25,15 +28,19 @@ export default function AlarmTab(props: AlarmTabProps) {
 
     if (props.isRegularAlarmTab) {
         return (<RegularAlarmTab
+            isCreating={isCreatingAlarms}
             isDeleting={isDeletingAlarms}
             onToggleDelete={e => {
-                console.log(`Toggled Regular alarm Toggle new value is: ${e}`)
                 setIsDeletingAlarms(e)
+            }}
+            onToggleCreation={e => {
+                setIsCreatingAlarms(e)
             }}
             onNewAlarmCreated={props.onNewAlarmCreated}
         />);
     } else {
         return (<PlaytimeAlarmTab
+            isCreating={isCreatingAlarms}
             isDeleting={isDeletingAlarms}
             onToggleDelete={e => {
                 console.log(`Toggled Playtime alarm Toggle new value is: ${e}`)
@@ -95,12 +102,23 @@ export function RegularAlarmTab(props: AlarmTabProps) {
                 checked={props.isDeleting || false}
                 onChange={props.onToggleDelete}
             />
-            <AlarmCreator
-                onNewAlarmCreated={() => {
-                    props.onNewAlarmCreated?.()
-                    onNewAlarmCreated()
-                }}
+
+            <ToggleField
+                label='IsCreating ?'
+                checked={props.isCreating || false}
+                onChange={props.onToggleCreation}
             />
+            {
+                (props.isCreating || false) ?
+                     <AlarmCreator
+                    onNewAlarmCreated={() => {
+                        props.onNewAlarmCreated?.()
+                        onNewAlarmCreated()
+                        props.onToggleCreation?.(false)
+                    }}
+                /> :
+                null
+            }
         </PanelSection>
     );
 }
