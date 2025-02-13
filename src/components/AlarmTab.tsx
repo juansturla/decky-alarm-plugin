@@ -94,30 +94,46 @@ export function RegularAlarmTab(props: AlarmTabProps) {
             );
         }
     );
+    const deleteAlarmsToggle = <ToggleField
+        label='Delete Alarms'
+        checked={props.isDeleting || false}
+        onChange={props.onToggleDelete}
+    />;
+    const createAlarmsToggle = <ToggleField
+        label='Create new Alarms'
+        checked={props.isCreating || false}
+        onChange={props.onToggleCreation}
+    />;
     return (
         <PanelSection>
-            {regularAlarmElements}
-            <ToggleField
-                label='IsDeleting ?'
-                checked={props.isDeleting || false}
-                onChange={props.onToggleDelete}
-            />
-
-            <ToggleField
-                label='IsCreating ?'
-                checked={props.isCreating || false}
-                onChange={props.onToggleCreation}
-            />
             {
-                (props.isCreating || false) ?
-                     <AlarmCreator
+                (props.isCreating || false)
+                ? null
+                : regularAlarmElements
+            }
+
+            {
+                (props.isCreating || false)
+                ? null
+                : deleteAlarmsToggle
+            }
+
+            {
+                (props.isDeleting || false)
+                ? null
+                : createAlarmsToggle
+            }
+
+            {
+                (props.isCreating || false)
+                ? <AlarmCreator
                     onNewAlarmCreated={() => {
                         props.onNewAlarmCreated?.()
                         onNewAlarmCreated()
                         props.onToggleCreation?.(false)
                     }}
-                /> :
-                null
+                />
+                : null
             }
         </PanelSection>
     );
