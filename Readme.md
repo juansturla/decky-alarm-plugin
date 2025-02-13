@@ -8,10 +8,17 @@ Built with [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader).
 
 ## Features
 
--   Configure time playing alarms
 -   Configure clock time alarms
 -   Whenever an alarm is triggered, a toast will be shown
+-   Alarms can be disabled or deleted
 
 ## Screenshots
 
-![](images/image001.png)
+Home screen
+![](images/decky-alarm.png)
+
+Creating a new alarm
+![](images/alarm-creation.png)
+
+Alarms will show even if you play !
+![](images/alarm-beep.png)

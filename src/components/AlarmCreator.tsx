@@ -16,7 +16,7 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
     const [hours, setHours] = useState<number>(0);
     const [minutes, setMinutes] = useState<number>(0);
 
-    const setMinutesWrapper = (newMinutes:number) => {
+    const setMinutesWrapper = (newMinutes: number) => {
         if (newMinutes < 0) {
             setMinutes(55)
         } else if (newMinutes >= 60) {
@@ -26,7 +26,7 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
         }
     }
 
-    const seHoursWrapper = (newHours:number) => {
+    const seHoursWrapper = (newHours: number) => {
         if (newHours < 0) {
             setHours(23)
         } else if (newHours >= 24) {
@@ -37,86 +37,75 @@ export default function AlarmCreator(props: AlarmCreatorProps) {
     }
 
     return (
-    <PanelSectionRow>
-        <label>Hours</label>
-        <div style={{
-            display: 'flex',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            flexDirection: 'row',
-        }}>
+        <PanelSectionRow>
+            <label>
+                Hours
+            </label>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                flexDirection: 'row',
+            }}>
 
-            <Button
-                onClick={
-                    _ => seHoursWrapper(hours - 1)
-                }
-            >
-                -
-            </Button>
-            <TextField
-                disabled={true}
-                rangeMin={0}
-                rangeMax={24}
-                mustBeNumeric={true}
-                value={hours.toString()}>
-            </TextField>
-            <Button
-                onClick={
-                    _ => seHoursWrapper(hours + 1)
-                }
-            >
-                +
-            </Button>
-        </div>
-        <label>Minutes</label>
-        <div style={{
-            display: 'flex',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            flexDirection: 'row',
-        }}>
+                <Button
+                    onClick={_ => seHoursWrapper(hours - 1)}>
+                    -
+                </Button>
+                <TextField
+                    disabled={true}
+                    rangeMin={0}
+                    rangeMax={24}
+                    mustBeNumeric={true}
+                    value={hours.toString()}>
+                </TextField>
+                <Button
+                    onClick={_ => seHoursWrapper(hours + 1)}>
+                    +
+                </Button>
+            </div>
+            <label>
+                Minutes
+            </label>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                flexDirection: 'row',
+            }}>
 
-            <Button
-                onClick={
-                    _ => setMinutesWrapper(minutes - 5)
-                }
-            >
-                -
-            </Button>
-            <TextField
-                disabled={true}
-                mustBeNumeric={true}
-                rangeMin={0}
-                rangeMax={60}
-                value={minutes.toString()}>
-            </TextField>
-            <Button
-                onClick={
-                    _ => {setMinutesWrapper(minutes + 5)}
-                }
-            >
-                +
-            </Button>
-        </div>
-        <ButtonItem
-            onClick={
-                _ => createNewAlarm(hours, minutes, props)
-            }
-        >
-            Create alarm
-        </ButtonItem>
-    </PanelSectionRow>
+                <Button
+                    onClick={_ => setMinutesWrapper(minutes - 5)}>
+                    -
+                </Button>
+                <TextField
+                    disabled={true}
+                    mustBeNumeric={true}
+                    rangeMin={0}
+                    rangeMax={60}
+                    value={minutes.toString()}>
+                </TextField>
+                <Button
+                    onClick={_ => setMinutesWrapper(minutes + 5)}>
+                    +
+                </Button>
+            </div>
+            <ButtonItem
+                onClick={_ => createNewAlarm(hours, minutes, props)}>
+                Create alarm
+            </ButtonItem>
+        </PanelSectionRow>
     );
 };
 
-async function createNewAlarm(hours:number, minutes:number, props:AlarmCreatorProps) {
+async function createNewAlarm(hours: number, minutes: number, props: AlarmCreatorProps) {
     const totalMinutes = hours * 60 + minutes;
     // Save alarm in cache
     const result = await addRegularAlarm(totalMinutes);
     // Initialize alarm
     if (result) {
         await Timer.setRegularAlarmTimer(totalMinutes, true);
-        if (props.onNewAlarmCreated != null){
+        if (props.onNewAlarmCreated != null) {
             props.onNewAlarmCreated();
         }
     }

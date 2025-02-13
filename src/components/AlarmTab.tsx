@@ -51,7 +51,7 @@ export default function AlarmTab(props: AlarmTabProps) {
     }
 };
 
-function toggleRegularAlarm(keyAsInteger:number,newValue:boolean) {
+function toggleRegularAlarm(keyAsInteger: number, newValue: boolean) {
     if (newValue) {
         Timer.setRegularAlarmTimer(keyAsInteger, true);
     } else {
@@ -108,40 +108,40 @@ export function RegularAlarmTab(props: AlarmTabProps) {
         <PanelSection>
             {
                 (props.isCreating || false)
-                ? null
-                : regularAlarmElements
+                    ? null
+                    : regularAlarmElements
             }
 
             {
                 (props.isCreating || false)
-                ? null
-                : deleteAlarmsToggle
+                    ? null
+                    : deleteAlarmsToggle
             }
 
             {
                 (props.isDeleting || false)
-                ? null
-                : createAlarmsToggle
+                    ? null
+                    : createAlarmsToggle
             }
 
             {
                 (props.isCreating || false)
-                ? <AlarmCreator
-                    onNewAlarmCreated={() => {
-                        props.onNewAlarmCreated?.()
-                        onNewAlarmCreated()
-                        props.onToggleCreation?.(false)
-                    }}
-                />
-                : null
+                    ? <AlarmCreator
+                        onNewAlarmCreated={() => {
+                            props.onNewAlarmCreated?.()
+                            onNewAlarmCreated()
+                            props.onToggleCreation?.(false)
+                        }}
+                    />
+                    : null
             }
         </PanelSection>
     );
 }
 
+// TODO: Not implemented yet
 export function PlaytimeAlarmTab(props: AlarmTabProps) {
     console.log(`Rendering PlaytimeAlarmTab props: isDeleting ? ${props.isDeleting} `);
-
     const playtimeAlarms = usePlaytimeAlarm();
     const playtimeAlarmsElements = Object.entries(playtimeAlarms).map(
         ([key, value]) => {
@@ -155,7 +155,7 @@ export function PlaytimeAlarmTab(props: AlarmTabProps) {
                 <AlarmRow
                     isDeleting={props.isDeleting}
                     onToggle={e => toggleRegularAlarm(keyAsInteger, e)}
-                    onDeleteClicked={async() => {
+                    onDeleteClicked={async () => {
                         await deleteRegularAlarm(keyAsInteger);
                         //onNewAlarmCreated();
                     }}

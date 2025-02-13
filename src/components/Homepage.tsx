@@ -25,7 +25,8 @@ export default function HomePage() {
             isRegularAlarmTab={true} />,
             id: "regular",
           },
-          /*{
+          /* Not implemented yet
+          {
             title: "Playtime Alarms",
             content: <AlarmTab
              isRegularAlarmTab={false} />,
