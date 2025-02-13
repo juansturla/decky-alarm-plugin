@@ -15,10 +15,10 @@ Built with [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader).
 ## Screenshots
 
 Home screen
-![](images/decky-alarm.png)
+![](images/decky-alarm.jpeg)
 
 Creating a new alarm
-![](images/alarm-creation.png)
+![](images/alarm-creation.jpeg)
 
 Alarms will show even if you play !
-![](images/alarm-beep.png)
+![](images/alarm-beep.jpeg)
