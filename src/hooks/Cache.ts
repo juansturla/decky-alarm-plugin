@@ -21,31 +21,26 @@ export async function updateCache<T>(key: string, value: T) {
     await localforage.setItem(key, value);
 }
 
+// TODO: Not implemented yet
 const samplePlaytimeAlarms = {
     [30]: false,
     [60]: false,
 }
 
-// In minutes also
+// In minutes
 const sampleRegularAlarms = {
-    [0]: true, //00:00
-    [150]: true, //02:30am
-    [480]: false, //8:00am
+    [0]: true, //00:00, enabled
+    [150]: true, //02:30am, enabled
+    [480]: false, //8:00am, disabled
 }
 
-// TODO: Implement this
-// export async function setPlaytimeAlarms --> Replace all alarms
-// export async function setRegularAlarms --> Replace all alarms
-
-// export async function addPlaytimeAlarms --> Get current alarms and add new one
-// export async function addRegularAlarms --> Get current alarms and add new one
-export async function addRegularAlarm(minutes:number): Promise<boolean> {
+export async function addRegularAlarm(minutes: number): Promise<boolean> {
     const currentAlarms = await getRegularAlarms();
 
     const index = Object.keys(currentAlarms).findIndex(item => item === minutes.toString());
     // Key already exists
     if (index !== -1) {
-      return false;
+        return false;
     }
 
     currentAlarms[minutes] = true;
@@ -53,13 +48,13 @@ export async function addRegularAlarm(minutes:number): Promise<boolean> {
     return true;
 }
 
-export async function deleteRegularAlarm(minutes:number): Promise<boolean> {
+export async function deleteRegularAlarm(minutes: number): Promise<boolean> {
     const currentAlarms = await getRegularAlarms();
 
     const index = Object.keys(currentAlarms).findIndex(item => item === minutes.toString());
     // Key doesn't exists
     if (index === -1) {
-      return false;
+        return false;
     }
 
     delete currentAlarms[minutes];
@@ -67,12 +62,12 @@ export async function deleteRegularAlarm(minutes:number): Promise<boolean> {
     return true;
 }
 
-export async function updateRegularAlarm(minutes:number, newValue:boolean): Promise<boolean> {
+export async function updateRegularAlarm(minutes: number, newValue: boolean): Promise<boolean> {
     const currentAlarms = await getRegularAlarms();
     const index = Object.keys(currentAlarms).findIndex(item => item === minutes.toString());
     // Key doesn't exists
     if (index === -1) {
-      return false;
+        return false;
     }
 
     currentAlarms[minutes] = newValue;
@@ -90,6 +85,7 @@ export const useRegularAlarm = () => {
     return regularAlarms;
 };
 
+// TODO: Not implemented yet
 export const usePlaytimeAlarm = () => {
     const [playtimeAlarms, setPlaytimeAlarms] = useState<PlaytimeAlarmDict>({});
     useEffect(() => {
@@ -106,6 +102,8 @@ export async function getCache<T>(key: string): Promise<T | null> {
     return await localforage.getItem<T>(key);
 }
 
+
+// TODO: Not implemented yet
 export async function getPlaytimeAlarms(): Promise<PlaytimeAlarmDict> {
     const alarms = await localforage.getItem<PlaytimeAlarmDict>(playtimeKey);
     if (!alarms) {

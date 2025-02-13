@@ -45,7 +45,6 @@ export class Timer {
 
     const totalMinutesUntilAlarm = alarmTotalMinutes - nowTotalMinutes;
 
-    //clearInterval(this.timer);
     const callback = async () => {
       // Fire toast alarm
       toaster.toast({ title: 'Regular alarm !', body: minutesToDateTimeString(timeInMinutes) })
@@ -56,7 +55,7 @@ export class Timer {
     const intervalInSeconds = totalMinutesUntilAlarm * 60;
     this.regularAlarmTimers[timeInMinutes] = await this.getInterval(intervalInSeconds, callback);
     if (instantToast) {
-      toaster.toast({ title: 'Alarm ready!', body: `Will sound in ${minutesToDateTimeString(totalMinutesUntilAlarm)}`})
+      toaster.toast({ title: 'Alarm ready!', body: `Will sound in ${minutesToDateTimeString(totalMinutesUntilAlarm)}` })
       updateRegularAlarm(timeInMinutes, true);
     }
   }
@@ -71,7 +70,6 @@ export class Timer {
     clearInterval(this.regularAlarmTimers[timeInMinutes]);
     delete this.regularAlarmTimers[timeInMinutes];
 
-    // update
     await updateRegularAlarm(timeInMinutes, false);
   }
 
@@ -114,7 +112,7 @@ export class Timer {
     [minutes: number]: NodeJS.Timeout;
   } = {};
 
-  //TODO
+  //TODO: Not implemented yet
   public static setPlaytimeAlarmTimer = async (minutes: number) => {
     const index = Object.keys(this.playtimeAlarmTimers).findIndex(item => item === minutes.toString());
     if (index !== -1) {
