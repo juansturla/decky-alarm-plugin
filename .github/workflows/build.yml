@@ -66,8 +66,9 @@ jobs:
                   tar -czvf decky-alarm.tar.gz decky-alarm
 
             - name: Create a release
+              permissions:
+                contents: write
               uses: ncipollo/release-action@v1
               with:
                   artifacts: 'decky-alarm.zip,decky-alarm.tar.gz'
                   bodyFile: 'release.md'
-                  token: ${{ secrets.GITHUB_TOKEN }}
