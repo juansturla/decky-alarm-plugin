@@ -14,11 +14,10 @@
         "@commitlint/cli": "^17.8.1",
         "@commitlint/config-conventional": "^17.8.1",
         "@decky/rollup": "^1.0.1",
-        "@decky/ui": "^4.8.0",
+        "@decky/ui": "^4.11.0",
         "@types/react": "^17.0.70",
         "@types/react-dom": "^18.2.15",
         "@types/webpack": "^5.28.0",
-
         "husky": "^8.0.3",
         "lint-staged": "^13.3.0",
         "prettier": "2.7.1",
